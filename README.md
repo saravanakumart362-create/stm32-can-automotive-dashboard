@@ -25,7 +25,7 @@ Each of the five dashboard instances is identical and shows:
 
 ![Dashboard demo](docs/assets/screenshots/dashboard_demo.gif)
 
-*Full video with audio: [dashboard_demo.mp4](docs/assets/demo/dashboard_demo.mp4)*
+*Full video : [dashboard_demo.mp4](docs/assets/demo/dashboard_demo.mp4)*
 
 
 
