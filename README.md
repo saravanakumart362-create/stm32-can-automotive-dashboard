@@ -23,10 +23,7 @@ Each of the five dashboard instances is identical and shows:
 
 ## Screenshots & Demo
 
-<!-- Add real screenshots here once available, e.g.: -->
-<!-- ![Dashboard overview](docs/assets/screenshots/dashboard_overview.png) -->
-
-*Screenshots to be added — dashboard running with live gauges, notification badges, threshold warnings, and CAN node status.*
+![Dashboard overview](docs/assets/screenshots/dashboard_overview.png)
 
 ### Dashboard Features
 
@@ -45,7 +42,7 @@ Each of the five dashboards is a PyQt5 application connected to its own ECU over
 
 ### ECU Internal Detail
 
-![ECU Internal Detail](docs/assets/ecu_detail.svg)
+![ECU Internal Detail](docs/assets/ecu_detail.png)
 
 Each ECU has two independent signal paths out of the STM32:
 - **CAN path:** the STM32's built-in CAN controller talks to an external MCP2551 transceiver, which drives the differential CANH/CANL lines onto the bus. On the two nodes sitting at the physical ends of the bus, a 120Ω resistor bridges CANH and CANL inside the transceiver stage.
@@ -53,7 +50,7 @@ Each ECU has two independent signal paths out of the STM32:
 
 ### Network Overview
 
-![Network Overview](docs/assets/network_overview.svg)
+![Network Overview](docs/assets/network_overview.png)
 
 All five ECUs share the identical internal signal path described above and sit on the same physical CAN bus.
 
@@ -216,8 +213,8 @@ stm32-can-automotive-dashboard/
 ├── docs/
 │   ├── cahier_des_charges.xlsx   # project requirements
 │   └── assets/
-│       ├── ecu_detail.svg
-│       ├── network_overview.svg
+│       ├── ecu_detail.png
+│       ├── network_overview.png
 │       ├── state_machine.png
 │       └── screenshots/          # dashboard screenshots / demo GIF
 ├── firmware/
