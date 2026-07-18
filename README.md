@@ -44,7 +44,7 @@ Each of the five dashboards is a PyQt5 application connected to its own ECU over
 
 ## Architecture
 
-### ECU Internal Detail
+### ▸ ECU Internal Detail
 
 ![ECU Internal Detail](docs/assets/ecu_detail.png)
 
@@ -52,7 +52,7 @@ Each ECU has two independent signal paths out of the STM32:
 - **CAN path:** the STM32's built-in CAN controller talks to an external MCP2551 transceiver, which drives the differential CANH/CANL lines onto the bus. On the two nodes sitting at the physical ends of the bus, a 120Ω resistor bridges CANH and CANL inside the transceiver stage.
 - **UART path:** the STM32's UART peripheral is wired to the on-board ST-Link, which exposes a Virtual COM Port (VCP) over USB — this is the serial port the dashboard connects to. The exact port shown (e.g. `COM1`, `COM7` on Windows, `/dev/ttyACM0` on Linux) is just an example — it depends entirely on the host machine and which USB port is used, and can differ from one connection to the next.
 
-### Network Overview
+### ▸ Network Overview
 
 ![Network Overview](docs/assets/network_overview.png)
 
