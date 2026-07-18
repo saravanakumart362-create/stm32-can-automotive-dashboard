@@ -23,6 +23,8 @@ Each of the five dashboard instances is identical and shows:
 
 ## Screenshots & Demo
 
+![Dashboard overview](docs/assets/screenshots/dashboard_overview.png)
+
 ![Dashboard demo](docs/assets/screenshots/dashboard_demo.gif)
 
 *Full video with audio: [dashboard_demo.mp4](docs/assets/demo/dashboard_demo.mp4)*
