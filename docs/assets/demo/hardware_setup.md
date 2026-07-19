@@ -19,4 +19,5 @@
 
 
 ## Saleae Logic Analyzer
+<img width="1200" height="1600" alt="Saleae Logic Analyzer" src="https://github.com/user-attachments/assets/d7677656-24ce-4217-b0f3-cb7a734a237f" />
 
