@@ -7,6 +7,7 @@
 
 
 ## Wiring Schematic (2)
+<img width="1200" height="1600" alt="Wiring Schematic (2)" src="https://github.com/user-attachments/assets/a8df7096-f12a-40d3-a6b7-fc5d435b089a" />
 
 
 ## MCP2551 CAN Transceiver
