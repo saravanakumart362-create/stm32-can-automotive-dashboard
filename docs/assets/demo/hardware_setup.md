@@ -15,6 +15,7 @@
 
 
 ## PCAN-USB Device
+<img width="1200" height="1600" alt="PCAN-USB Device" src="https://github.com/user-attachments/assets/fb17930b-f5c5-43a2-9a5d-e5be541c6c96" />
 
 
 ## Saleae Logic Analyzer
