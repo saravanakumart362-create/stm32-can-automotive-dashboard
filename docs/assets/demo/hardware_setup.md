@@ -21,3 +21,6 @@
 ## Saleae Logic Analyzer
 <img width="1200" height="1600" alt="Saleae Logic Analyzer" src="https://github.com/user-attachments/assets/d7677656-24ce-4217-b0f3-cb7a734a237f" />
 
+## NUCLEO-F429ZI Board (ECU-01)
+
+*The STM32F429ZI Nucleo board used for ECU-01 (Pressure / ABS), wired to the CAN transceiver and logic analyzer probes during development and validation.*<img width="1200" height="1600" alt="NUCLEO-F429ZI" src="https://github.com/user-attachments/assets/2aab736e-6dc4-434a-ac7e-7f69617a6e89" />
