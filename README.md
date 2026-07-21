@@ -215,12 +215,24 @@ Because every node runs the same pass-through filter, there is no single "gatewa
 ```
 stm32-can-automotive-dashboard/
 ├── docs/
-│   ├── cahier_des_charges.xlsx   # project requirements
+│   ├── cahier_des_charges.xlsx              # project requirements (generic)
+│   ├── SRS_STM32_CAN_UART_Dashboard.xlsx     # as-built SRS, requirement-to-code traceability
+│   ├── debugging_notes.md                    # resolved technical issues
 │   └── assets/
 │       ├── ecu_detail.png
 │       ├── network_overview.png
 │       ├── state_machine.png
-│       └── screenshots/          # dashboard screenshots / demo GIF
+│       ├── screenshots/                      # dashboard screenshots / demo GIF
+│       └── demo/
+│           ├── dashboard_demo.md             # full dashboard demo video
+│           ├── dashboard_demo.mp4
+│           ├── pcan_cross_validation.md      # cross-node validation with PCAN-View
+│           ├── pcan_cross_validation.mp4
+│           ├── pcan_frame_capture.md         # live CAN frame capture
+│           ├── pcan_frame_capture.mp4
+│           ├── saleae_bitlevel_decode.md     # bit-level CAN decode + raw capture
+│           ├── can.sal
+│           └── hardware_setup.md             # wiring schematic, transceiver, board, analyzers
 ├── firmware/
 │   ├── Core/
 │   │   ├── Inc/                  # headers
