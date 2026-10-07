@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>STM32 CAN Automotive Dashboard — Live Demo</title>
+<meta name="description" content="Browser demo of a 5-node STM32 CAN automotive network: live dashboard, virtual test bench and 3D car, driven by a simulated CAN bus.">
+<link rel="stylesheet" href="web/style.css">
+</head>
+<body>
+
+<header class="demo-bar">
+  <div class="demo-title">STM32 CAN AUTOMOTIVE DASHBOARD <span>· LIVE DEMO</span></div>
+  <div class="demo-note">
+    <b>Simulated CAN bus</b> — the real system runs on 5 STM32 NUCLEO-F429ZI boards.
+    Proof from the hardware:
+    <a href="https://github.com/saravanakumart362-create/stm32-can-automotive-dashboard/blob/main/docs/assets/demo/dashboard_demo.md" target="_blank" rel="noopener">hardware video</a> ·
+    <a href="https://github.com/saravanakumart362-create/stm32-can-automotive-dashboard/blob/main/docs/assets/demo/saleae_bitlevel_decode.md" target="_blank" rel="noopener">Saleae captures</a> ·
+    <a href="https://github.com/saravanakumart362-create/stm32-can-automotive-dashboard" target="_blank" rel="noopener">source code</a>
+  </div>
+</header>
+
+<nav class="tabs" role="tablist">
+  <button type="button" role="tab" data-view="dashboard" class="active">DASHBOARD</button>
+  <button type="button" role="tab" data-view="bench">VIRTUAL BENCH</button>
+  <button type="button" role="tab" data-view="car">VIRTUAL CAR 3D</button>
+  <span class="tab-hint">One simulated bus feeds all three views — change a sensor in any of them.</span>
+</nav>
+
+<main>
+
+<!-- ═════════════ Dashboard (dashboard_window.py) ═════════════ -->
+<section id="view-dashboard" class="view active">
+  <div class="d-header">
+    <span class="logo">◈</span>
+    <span class="brand">OPCODE  LABS</span>
+    <span class="sub">CAN AUTOMOTIVE DASHBOARD</span>
+    <span class="grow"></span>
+    <div id="d-hdr-nodes" class="hdr-nodes"></div>
+    <span id="d-clock">--:--:--</span>
+    <span id="d-status">● OFFLINE</span>
+  </div>
+
+  <div class="d-warnbar">
+    <span class="lbl">WARNING  INDICATORS</span>
+    <span class="vsep"></span>
+    <div id="d-warns" class="warns"></div>
+    <span class="grow"></span>
+    <span class="vsep"></span>
+    <div class="frames">
+      <div class="cap">FRAMES RX</div>
+      <div id="d-frames-hz">0.0 Hz</div>
+    </div>
+    <span id="d-frames-total">0</span>
+  </div>
+
+  <div class="d-body">
+    <aside class="d-left">
+      <div class="group">
+        <div class="group-title teal">CONNECTION</div>
+        <label class="field"><span>Port:</span>
+          <select id="d-port"><option>Virtual ECU (simulator)</option></select>
+        </label>
+        <label class="field"><span>Baud:</span>
+          <select id="d-baud">
+            <option>9600</option><option>19200</option><option>38400</option>
+            <option>57600</option><option selected>115200</option><option>230400</option>
+          </select>
+        </label>
+        <div class="btn-row">
+          <button type="button" id="d-connect" class="btn-connect">CONNECT</button>
+          <button type="button" id="d-disconnect" class="btn-disconnect">DISCONNECT</button>
+        </div>
+      </div>
+
+      <div class="group">
+        <div class="group-title orange">COMMANDS  →  STM32</div>
+        <div class="section" style="--c:#00E676">LIGHTS</div>
+        <div class="btn-row">
+          <button type="button" class="cmd" style="--c:#00E676" data-cmd="1">● LIGHTS ON</button>
+          <button type="button" class="cmd" style="--c:#FF3D3D" data-cmd="2">○ LIGHTS OFF</button>
+        </div>
+        <button type="button" class="cmd" style="--c:#F0A500" data-cmd="16">⟳   READ SENSOR</button>
+        <button type="button" class="cmd" style="--c:#FF3D3D" data-cmd="17">⚠   TRIGGER ABS</button>
+        <hr>
+        <div class="section" style="--c:#F0A500">MANUAL FRAME</div>
+        <label class="field"><span>CMD</span>
+          <input id="d-man-cmd" list="d-cmd-list" value="0x10" spellcheck="false">
+        </label>
+        <label class="field"><span>DATA</span>
+          <input id="d-man-data" list="d-data-list" value="0x00000000" spellcheck="false">
+        </label>
+        <datalist id="d-cmd-list">
+          <option value="0x01"><option value="0x02"><option value="0x10"><option value="0x11">
+          <option value="0x20"><option value="0x21"><option value="0x22"><option value="0x23"><option value="0x24">
+        </datalist>
+        <datalist id="d-data-list">
+          <option value="0x00000000"><option value="0x00000001"><option value="0x0000007F"><option value="0x000000FF">
+        </datalist>
+        <button type="button" id="d-send" class="btn-send">▶   SEND FRAME</button>
+      </div>
+
+      <div class="group">
+        <div class="group-title green">CAN  NODE  STATUS</div>
+        <div id="d-node-status" class="stack"></div>
+      </div>
+    </aside>
+
+    <div class="d-center">
+      <div class="group gauges">
+        <div class="group-title amber">SENSOR  DASHBOARD  ←  CAN  NETWORK</div>
+        <div id="d-gauges-top" class="gauge-row top"></div>
+        <div id="d-gauges-bot" class="gauge-row"></div>
+      </div>
+      <div class="group">
+        <div class="group-title amber">SIMULATOR  INPUTS  —  STAND IN FOR THE REAL SENSORS AND PUSH BUTTONS</div>
+        <div id="d-sim-inputs" class="sim-inputs"></div>
+        <div class="check-row">
+          <label><input type="checkbox" id="d-auto-all"> Auto sweep all sensors</label>
+          <label><input type="checkbox" id="d-random"> Random button presses</label>
+        </div>
+      </div>
+    </div>
+
+    <aside class="d-right">
+      <div class="group">
+        <div class="group-title teal">NETWORK  EVENTS  —  PASSIVE  NOTIFICATIONS</div>
+        <div id="d-events" class="stack"></div>
+      </div>
+      <div class="group log-group">
+        <div class="group-title teal">FRAME  LOG  —  SERIAL  MONITOR</div>
+        <div id="d-log" class="log"></div>
+        <div class="check-row">
+          <label><input type="checkbox" id="d-log-tx"> Log TX</label>
+          <label><input type="checkbox" id="d-log-rx" checked> Log RX</label>
+          <span class="grow"></span>
+          <button type="button" id="d-log-clear" class="small-btn">Clear</button>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <div id="d-statusbar" class="statusbar"></div>
+</section>
+
+<!-- ═════════════ Virtual bench (virtual_bench.py) ═════════════ -->
+<section id="view-bench" class="view">
+  <div class="view-head">
+    <span class="title">VIRTUAL  BENCH</span>
+    <span class="hint">Move a slider or press a button — the frame goes onto the bus and into the dashboard</span>
+    <span class="grow"></span>
+    <label><input type="checkbox" id="b-auto-all"> Auto sweep all sensors</label>
+  </div>
+  <div class="bench-scroll">
+    <div class="bench-inner">
+      <div id="b-cards" class="node-cards"></div>
+      <canvas id="b-bus" class="bus-view"></canvas>
+    </div>
+  </div>
+  <div class="group log-group bench-log">
+    <div class="group-title teal">CAN  BUS  MONITOR</div>
+    <div id="b-log" class="log"></div>
+    <div class="check-row">
+      <label><input type="checkbox" id="b-show-sensors"> Show periodic sensor frames</label>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════════ Virtual car 3D (virtual_car3d.py) ═════════════ -->
+<section id="view-car" class="view">
+  <div class="car-layout">
+    <canvas id="c-canvas" class="car-canvas" tabindex="0"></canvas>
+    <aside class="car-side">
+      <div id="c-views" class="btn-row"></div>
+      <div class="check-row">
+        <label><input type="checkbox" data-opt="xray"> X-ray body</label>
+        <label><input type="checkbox" data-opt="labels"> Labels</label>
+        <label><input type="checkbox" data-opt="rotate"> Rotate</label>
+      </div>
+      <div id="c-cards" class="stack"></div>
+      <div class="check-row">
+        <label><input type="checkbox" id="c-auto-all"> Auto sweep all sensors</label>
+      </div>
+    </aside>
+  </div>
+</section>
+
+</main>
+
+<script src="web/sim.js"></script>
+<script src="web/dashboard.js"></script>
+<script src="web/bench.js"></script>
+<script src="web/car3d.js"></script>
+<script src="web/main.js"></script>
+</body>
+</html>

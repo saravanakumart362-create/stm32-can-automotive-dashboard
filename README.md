@@ -1,5 +1,7 @@
 # STM32 CAN Automotive Dashboard
 
+**▶ [Live Demo](https://saravanakumart362-create.github.io/stm32-can-automotive-dashboard/)** — the dashboard, the virtual test bench and the 3D car running in the browser on a *simulated* CAN bus. The real system runs on 5 STM32 boards: see the [hardware video](docs/assets/demo/dashboard_demo.md) and the [Saleae captures](docs/assets/demo/saleae_bitlevel_decode.md).
+
 A distributed automotive telemetry and control system built on five independent STM32 nodes communicating over a shared CAN bus, each paired with its own real-time PyQt5 supervision dashboard.
 
 Every node on the network sees the full picture: each one listens to all CAN traffic and mirrors it live on its own dashboard, turning five small embedded boards into a single coherent automotive network — sensors, actuators, and warnings included.
@@ -215,6 +217,8 @@ Because every node runs the same pass-through filter, there is no single "gatewa
 ```
 stm32-can-automotive-dashboard/
 ├── docs/
+│   ├── index.html                            # live demo page (GitHub Pages)
+│   ├── web/                                  # demo: simulated bus, dashboard, bench, 3D car (JS)
 │   ├── cahier_des_charges.xlsx              # project requirements (generic)
 │   ├── SRS_STM32_CAN_UART_Dashboard.xlsx     # as-built SRS, requirement-to-code traceability
 │   ├── debugging_notes.md                    # resolved technical issues
@@ -242,7 +246,15 @@ stm32-can-automotive-dashboard/
 │   │   └── STM32F4xx_HAL_Driver/ # ST HAL library
 │   └── *.ioc, *.ld               # CubeMX config, linker scripts
 └── dashboard/
-    └── stm32_dashboard.py        # PyQt5 dashboard
+    ├── stm32_dashboard.py        # Stable launcher and public entry point
+    ├── dashboard_window.py       # Main window and dashboard behavior
+    ├── widgets.py                # Reusable gauges, badges, and indicators
+    ├── protocol.py               # UART frame reader
+    ├── config.py                 # CAN commands, thresholds, and theme
+    ├── virtual_ecu.py            # Simulated 5-node CAN bus + ECU-01 UART link
+    ├── virtual_bench.py          # Virtual test bench window (--sim)
+    ├── virtual_car3d.py          # Virtual car in 3D window (--3d)
+    └── __init__.py               # Dashboard package exports
 ```
 
 ---
